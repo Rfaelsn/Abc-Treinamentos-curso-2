@@ -8,11 +8,10 @@ import javax.swing.JOptionPane;
 public class WassabiApp {
     public static void main(String[] args) {
         Cliente cliente = new Cliente();
-        boolean continuar = true;
         String [] opcoesContinuaProd = {"sim","finalizar"};
         String [] opcoesClassificProd = {"Promoção","Entradas","Temaki Especial","Holl Wassabi"};
-        String [] opcoesMenuConfirm = {"Editar Pedido", "Deletar Produto","Consultar Pedido","descartar Pedido","Finalizar Pedido"};
-        String selectClassificProd;
+        String [] opcoesMenuConfirm = {"descartar Pedido", "Deletar Produto","Consultar Pedido","Finalizar Pedido"};
+        
         cliente.setCpf(
         Long.parseLong(
             JOptionPane.showInputDialog("digite seu cpf")
@@ -21,10 +20,6 @@ public class WassabiApp {
 
         cliente.setNome(
         JOptionPane.showInputDialog("digite seu nome")
-        ); 
-
-        cliente.setEndereco(
-        JOptionPane.showInputDialog("digite seu endereço")
         ); 
 
         cliente.setTelefone(
@@ -45,7 +40,10 @@ public class WassabiApp {
         List <Entrada>produtosEntrada = new ArrayList<>();
         List <TemakiEspecial> produtosTemakiEsp = new ArrayList<>();
         List <HollWassabi> produtosHollWassabi = new ArrayList<>();
-
+        String selectClassificProd;
+        Object listaProdSelecionados [];
+        boolean continuar = true;
+        
         while (continuar) {
             selectClassificProd = (String) JOptionPane.showInputDialog(
                 null, "Selecione a Categoria de Produto",
@@ -101,7 +99,7 @@ public class WassabiApp {
              * apenas para utilizar no JOptionPane
              */
 
-            Object listaProdSelecionados [] = listaProdSelect.toArray();
+            listaProdSelecionados = listaProdSelect.toArray();
 
             String SelecionarProdutoCateg = (String) JOptionPane.showInputDialog(
                 null, "Selecione O produto desejado",
@@ -152,13 +150,13 @@ public class WassabiApp {
             JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcoesMenuConfirm, opcoesMenuConfirm[0]);
             switch (selectOpMenu) {
                 case 0 ->{
-                    
+                    WassabiApp.main(null);
                 }
                 case 1 ->{
                     for (int i = 0; i < pedido.getProdutos().size(); i++) {
                         listaProdSelect.add(pedido.getProdutos().get(i).getNomeProduto());
                     }
-                    Object listaProdSelecionados [] = listaProdSelect.toArray();
+                    listaProdSelecionados = listaProdSelect.toArray();
                     String SelecionarProdutoCateg = (String) JOptionPane.showInputDialog(
                         null, "Selecione O produto desejado",
                         null, JOptionPane.QUESTION_MESSAGE, null, 
@@ -172,17 +170,28 @@ public class WassabiApp {
                     JOptionPane.showMessageDialog(null, pedido.listarPedido());
                 }
                 case 3->{
-                    WassabiApp.main(null);
-                }
-                case 4 ->{
                     continuar = false;
                 }
             }
         }
 
-        
+        boolean entregaDomicilio = JOptionPane.showOptionDialog(
+            null, "Deseja entrega a domicílio ?", "Recebimento",JOptionPane.YES_NO_OPTION,  JOptionPane.QUESTION_MESSAGE, null, opcoesContinuaProd, null
+        )  == JOptionPane.YES_OPTION;
 
+        if (entregaDomicilio) {
+            cliente.setEndereco(
+                JOptionPane.showInputDialog("digite seu endereço")
+            ); 
 
+            JOptionPane.showMessageDialog(
+                null,"A encomenda Será entregue no endereço: "+ cliente.getEndereco()
+            );
+        }else{
+            JOptionPane.showMessageDialog(null,"Tempo estimado para retirada em nosso estabeleciomento: 10-20 min");
+        }
+
+        continuar = false;
         
     }
 

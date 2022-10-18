@@ -9,8 +9,13 @@ public class Pedido {
     private double totalPedido = 0;
 
     public void editaProduto(String nomeProduto,Produto novoProduto){
-        
+        for (int i = 0; i < this.produtos.size(); i++) {
+            if (produtos.get(i).getNomeProduto() == nomeProduto) {
+                produtos.add(i, novoProduto);
+            }
+        }
     }
+    
 
     public void adicionaProduto(Produto produto){
         this.produtos.add(produto);
